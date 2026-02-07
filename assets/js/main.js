@@ -1,5 +1,13 @@
 // JavaScript pour Entraide Plus Iroise
 
+// Appliquer le thème sauvegardé immédiatement (avant DOMContentLoaded pour éviter le flash)
+(function() {
+    var savedTheme = localStorage.getItem('site-theme');
+    if (savedTheme && savedTheme !== 'default') {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+})();
+
 document.addEventListener('DOMContentLoaded', function() {
     
     // ========================================
@@ -299,6 +307,56 @@ document.addEventListener('DOMContentLoaded', function() {
         counters.forEach(counter => counterObserver.observe(counter));
     }
     
+    // ========================================
+    // Sélecteur de thème
+    // ========================================
+    const themePickerBtn = document.querySelector('.theme-picker-btn');
+    const themeDropdown = document.querySelector('.theme-picker-dropdown');
+    const themeOptions = document.querySelectorAll('.theme-option');
+
+    if (themePickerBtn && themeDropdown) {
+        // Ouvrir/fermer le dropdown
+        themePickerBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            themeDropdown.classList.toggle('open');
+        });
+
+        // Fermer le dropdown en cliquant ailleurs
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.theme-picker')) {
+                themeDropdown.classList.remove('open');
+            }
+        });
+
+        // Marquer le thème actif au chargement
+        var currentTheme = localStorage.getItem('site-theme') || 'default';
+        themeOptions.forEach(function(opt) {
+            opt.classList.toggle('active', opt.getAttribute('data-theme') === currentTheme);
+        });
+
+        // Changer de thème
+        themeOptions.forEach(function(option) {
+            option.addEventListener('click', function() {
+                var theme = this.getAttribute('data-theme');
+
+                if (theme === 'default') {
+                    document.documentElement.removeAttribute('data-theme');
+                } else {
+                    document.documentElement.setAttribute('data-theme', theme);
+                }
+
+                localStorage.setItem('site-theme', theme);
+
+                themeOptions.forEach(function(opt) {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                themeDropdown.classList.remove('open');
+            });
+        });
+    }
+
     // ========================================
     // Messages flash (auto-disparition)
     // ========================================
