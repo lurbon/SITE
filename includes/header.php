@@ -7,7 +7,7 @@
     <title><?php echo isset($page_title) ? $page_title . ' - ' : ''; ?>Entraide Plus Iroise</title>
     
     <!-- CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?php echo time(); ?>">
     
     <!-- Favicon -->
     <link rel="icon" type="image/jpg" href="assets/images/Logo-Entraide-Plus-Iroise.jpg">
@@ -16,7 +16,25 @@
     <script>
     (function() {
         var t = localStorage.getItem('site-theme');
-        if (t && t !== 'default') document.documentElement.setAttribute('data-theme', t);
+        if (t && t !== 'default') {
+            var themes = {
+                'ardoise':   {pc:'#475569',pd:'#334155',pl:'#64748b',sc:'#0ea5e9',sd:'#0284c7',sl:'#38bdf8'},
+                'foret':     {pc:'#166534',pd:'#14532d',pl:'#15803d',sc:'#ca8a04',sd:'#a16207',sl:'#eab308'},
+                'bordeaux':  {pc:'#9f1239',pd:'#881337',pl:'#be123c',sc:'#d97706',sd:'#b45309',sl:'#f59e0b'},
+                'marine':    {pc:'#1e3a5f',pd:'#172e4a',pl:'#2563eb',sc:'#b45309',sd:'#92400e',sl:'#d97706'},
+                'aubergine': {pc:'#6b21a8',pd:'#581c87',pl:'#7c3aed',sc:'#0d9488',sd:'#0f766e',sl:'#14b8a6'}
+            };
+            var c = themes[t];
+            if (c) {
+                var s = document.documentElement.style;
+                s.setProperty('--primary-color',c.pc);
+                s.setProperty('--primary-dark',c.pd);
+                s.setProperty('--primary-light',c.pl);
+                s.setProperty('--secondary-color',c.sc);
+                s.setProperty('--secondary-dark',c.sd);
+                s.setProperty('--secondary-light',c.sl);
+            }
+        }
     })();
     </script>
 

@@ -62,13 +62,36 @@
     </div>
     <script>
     (function(){
+        var themes = {
+            'default':   {pc:'#2563eb',pd:'#1e40af',pl:'#3b82f6',sc:'#10b981',sd:'#059669',sl:'#34d399'},
+            'ardoise':   {pc:'#475569',pd:'#334155',pl:'#64748b',sc:'#0ea5e9',sd:'#0284c7',sl:'#38bdf8'},
+            'foret':     {pc:'#166534',pd:'#14532d',pl:'#15803d',sc:'#ca8a04',sd:'#a16207',sl:'#eab308'},
+            'bordeaux':  {pc:'#9f1239',pd:'#881337',pl:'#be123c',sc:'#d97706',sd:'#b45309',sl:'#f59e0b'},
+            'marine':    {pc:'#1e3a5f',pd:'#172e4a',pl:'#2563eb',sc:'#b45309',sd:'#92400e',sl:'#d97706'},
+            'aubergine': {pc:'#6b21a8',pd:'#581c87',pl:'#7c3aed',sc:'#0d9488',sd:'#0f766e',sl:'#14b8a6'}
+        };
+
+        function applyTheme(name) {
+            var t = themes[name] || themes['default'];
+            var r = document.documentElement.style;
+            r.setProperty('--primary-color', t.pc);
+            r.setProperty('--primary-dark', t.pd);
+            r.setProperty('--primary-light', t.pl);
+            r.setProperty('--secondary-color', t.sc);
+            r.setProperty('--secondary-dark', t.sd);
+            r.setProperty('--secondary-light', t.sl);
+        }
+
+        // Appliquer le thème sauvegardé
+        var cur = localStorage.getItem('site-theme') || 'default';
+        if (cur !== 'default') applyTheme(cur);
+
         var btn = document.getElementById('theme-picker-btn');
         var dd = document.getElementById('theme-dropdown');
         var opts = document.querySelectorAll('.theme-opt');
         if (!btn || !dd) return;
 
         // Marquer le thème actif
-        var cur = localStorage.getItem('site-theme') || 'default';
         opts.forEach(function(o){
             if (o.getAttribute('data-theme') === cur) o.style.background = '#f3f4f6';
         });
@@ -89,16 +112,9 @@
             o.addEventListener('mouseleave', function(){ o.style.background = o.getAttribute('data-theme') === (localStorage.getItem('site-theme')||'default') ? '#f3f4f6' : 'none'; });
             o.addEventListener('click', function(){
                 var theme = this.getAttribute('data-theme');
-                if (theme === 'default') {
-                    document.documentElement.removeAttribute('data-theme');
-                } else {
-                    document.documentElement.setAttribute('data-theme', theme);
-                }
+                applyTheme(theme);
                 localStorage.setItem('site-theme', theme);
-                // Mettre à jour le bouton couleur
-                var colors = {'default':'#2563eb','ardoise':'#475569','foret':'#166534','bordeaux':'#9f1239','marine':'#1e3a5f','aubergine':'#6b21a8'};
-                btn.style.background = colors[theme] || '#2563eb';
-                // Mettre à jour l'état actif
+                btn.style.background = themes[theme].pc;
                 opts.forEach(function(x){ x.style.background = 'none'; });
                 this.style.background = '#f3f4f6';
                 dd.style.display = 'none';
@@ -106,8 +122,7 @@
         });
 
         // Couleur initiale du bouton
-        var colors = {'default':'#2563eb','ardoise':'#475569','foret':'#166534','bordeaux':'#9f1239','marine':'#1e3a5f','aubergine':'#6b21a8'};
-        btn.style.background = colors[cur] || '#2563eb';
+        btn.style.background = themes[cur].pc;
     })();
     </script>
 
