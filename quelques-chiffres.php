@@ -25,11 +25,17 @@ include 'includes/header.php';
             
             <div style="background: linear-gradient(135deg, var(--secondary-color), var(--secondary-light)); 
                         color: white; padding: 3rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-xl);">
-                <div class="counter" data-target="120" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
-                <h3 style="color: white; font-size: 1.25rem; margin: 0;">Bénévoles actifs</h3>
+                <div class="counter" data-target="90" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
+                <h3 style="color: white; font-size: 1.25rem; margin: 0;">Bénévoles</h3>
                 <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 0.875rem;">Toujours plus nombreux</p>
             </div>
-            
+			
+              <div style="background: linear-gradient(135deg, var(--secondary-color), var(--secondary-light)); 
+                        color: white; padding: 3rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-xl);">
+                <div class="counter" data-target="300" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
+                <h3 style="color: white; font-size: 1.25rem; margin: 0;">Aidés</h3>
+                <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 0.875rem;">Toujours plus nombreux</p>
+            </div>          
             <div style="background: linear-gradient(135deg, #f59e0b, #fbbf24); 
                         color: white; padding: 3rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-xl);">
                 <div class="counter" data-target="600" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
