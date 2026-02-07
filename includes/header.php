@@ -33,65 +33,7 @@
                 <span>Entraide Plus Iroise</span>
             </a>
             
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <div class="theme-picker">
-                    <button class="theme-picker-btn" aria-label="Changer le thème de couleurs" title="Thème de couleurs">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="13.5" cy="6.5" r="2.5"/>
-                            <circle cx="17.5" cy="10.5" r="2.5"/>
-                            <circle cx="8.5" cy="7.5" r="2.5"/>
-                            <circle cx="6.5" cy="12.5" r="2.5"/>
-                            <path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10c.55 0 1-.45 1-1v-.5c0-.25.1-.48.27-.65.17-.17.4-.27.65-.27H15c3.31 0 6-2.69 6-6 0-5.17-4.03-9.58-9-9.58z"/>
-                        </svg>
-                    </button>
-                    <div class="theme-picker-dropdown">
-                        <div class="theme-picker-dropdown-title">Thème</div>
-                        <button class="theme-option active" data-theme="default">
-                            <span class="theme-swatch">
-                                <span style="background: #2563eb;"></span>
-                                <span style="background: #10b981;"></span>
-                            </span>
-                            Océan
-                        </button>
-                        <button class="theme-option" data-theme="ardoise">
-                            <span class="theme-swatch">
-                                <span style="background: #475569;"></span>
-                                <span style="background: #0ea5e9;"></span>
-                            </span>
-                            Ardoise
-                        </button>
-                        <button class="theme-option" data-theme="foret">
-                            <span class="theme-swatch">
-                                <span style="background: #166534;"></span>
-                                <span style="background: #ca8a04;"></span>
-                            </span>
-                            Forêt
-                        </button>
-                        <button class="theme-option" data-theme="bordeaux">
-                            <span class="theme-swatch">
-                                <span style="background: #9f1239;"></span>
-                                <span style="background: #d97706;"></span>
-                            </span>
-                            Bordeaux
-                        </button>
-                        <button class="theme-option" data-theme="marine">
-                            <span class="theme-swatch">
-                                <span style="background: #1e3a5f;"></span>
-                                <span style="background: #b45309;"></span>
-                            </span>
-                            Marine
-                        </button>
-                        <button class="theme-option" data-theme="aubergine">
-                            <span class="theme-swatch">
-                                <span style="background: #6b21a8;"></span>
-                                <span style="background: #0d9488;"></span>
-                            </span>
-                            Aubergine
-                        </button>
-                    </div>
-                </div>
-                <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
-            </div>
+            <button class="mobile-menu-toggle" aria-label="Toggle menu">☰</button>
 
             <nav>
                 <ul class="nav-menu">
@@ -116,6 +58,58 @@
                     <li><a href="nous-rejoindre.php">Nous rejoindre</a></li>
                     <li><a href="contact.php">Contact</a></li>
                     <li><a href="https://entraide-plus-iroise.fr/login.php" class="membre-link">Accès membre</a></li>
+                    <li class="theme-picker">
+                        <button class="theme-picker-btn" aria-label="Changer le thème de couleurs" title="Thème de couleurs">
+                            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                <path d="M12 2C6.49 2 2 6.49 2 12s4.49 10 10 10c.55 0 1-.45 1-1v-.5c0-.25.1-.48.27-.65.17-.17.4-.27.65-.27H15c3.31 0 6-2.69 6-6 0-5.17-4.03-9.58-9-9.58zM6.5 13c-.83 0-1.5-.67-1.5-1.5S5.67 10 6.5 10s1.5.67 1.5 1.5S7.33 13 6.5 13zm3-4C8.67 9 8 8.33 8 7.5S8.67 6 9.5 6s1.5.67 1.5 1.5S10.33 9 9.5 9zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 6 14.5 6s1.5.67 1.5 1.5S15.33 9 14.5 9zm3 4c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/>
+                            </svg>
+                        </button>
+                        <div class="theme-picker-dropdown" style="display:none;">
+                            <div class="theme-picker-dropdown-title">Thème</div>
+                            <button class="theme-option active" data-theme="default">
+                                <span class="theme-swatch">
+                                    <span style="background:#2563eb;"></span>
+                                    <span style="background:#10b981;"></span>
+                                </span>
+                                Océan
+                            </button>
+                            <button class="theme-option" data-theme="ardoise">
+                                <span class="theme-swatch">
+                                    <span style="background:#475569;"></span>
+                                    <span style="background:#0ea5e9;"></span>
+                                </span>
+                                Ardoise
+                            </button>
+                            <button class="theme-option" data-theme="foret">
+                                <span class="theme-swatch">
+                                    <span style="background:#166534;"></span>
+                                    <span style="background:#ca8a04;"></span>
+                                </span>
+                                Forêt
+                            </button>
+                            <button class="theme-option" data-theme="bordeaux">
+                                <span class="theme-swatch">
+                                    <span style="background:#9f1239;"></span>
+                                    <span style="background:#d97706;"></span>
+                                </span>
+                                Bordeaux
+                            </button>
+                            <button class="theme-option" data-theme="marine">
+                                <span class="theme-swatch">
+                                    <span style="background:#1e3a5f;"></span>
+                                    <span style="background:#b45309;"></span>
+                                </span>
+                                Marine
+                            </button>
+                            <button class="theme-option" data-theme="aubergine">
+                                <span class="theme-swatch">
+                                    <span style="background:#6b21a8;"></span>
+                                    <span style="background:#0d9488;"></span>
+                                </span>
+                                Aubergine
+                            </button>
+                        </div>
+                    </li>
                 </ul>
             </nav>
         </div>

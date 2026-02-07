@@ -318,13 +318,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Ouvrir/fermer le dropdown
         themePickerBtn.addEventListener('click', function(e) {
             e.stopPropagation();
-            themeDropdown.classList.toggle('open');
+            var isOpen = themeDropdown.style.display === 'block';
+            themeDropdown.style.display = isOpen ? 'none' : 'block';
         });
 
         // Fermer le dropdown en cliquant ailleurs
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.theme-picker')) {
-                themeDropdown.classList.remove('open');
+                themeDropdown.style.display = 'none';
             }
         });
 
@@ -352,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 this.classList.add('active');
 
-                themeDropdown.classList.remove('open');
+                themeDropdown.style.display = 'none';
             });
         });
     }

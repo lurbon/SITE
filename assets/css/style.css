@@ -630,15 +630,16 @@ textarea.form-control {
 /* ========================================
    SÉLECTEUR DE THÈME
    ======================================== */
-.theme-picker {
+li.theme-picker {
     position: relative;
+    list-style: none;
 }
 
 .theme-picker-btn {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 6px;
+    padding: 6px 8px;
     border-radius: var(--radius-md);
     color: var(--text-secondary);
     transition: all var(--transition-fast);
@@ -653,12 +654,12 @@ textarea.form-control {
 }
 
 .theme-picker-btn svg {
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
+    display: block;
 }
 
 .theme-picker-dropdown {
-    display: none;
     position: absolute;
     top: 100%;
     right: 0;
@@ -669,11 +670,6 @@ textarea.form-control {
     padding: 12px;
     z-index: 1001;
     min-width: 180px;
-}
-
-.theme-picker-dropdown.open {
-    display: block;
-    animation: fadeInUp 0.2s ease-out;
 }
 
 .theme-picker-dropdown-title {
