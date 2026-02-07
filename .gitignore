@@ -1,0 +1,4 @@
+# Fichiers sensibles
+config.php
+.env
+*.log
