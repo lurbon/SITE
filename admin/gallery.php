@@ -276,17 +276,18 @@ foreach ($photos as $photo) {
 <body>
     <div class="admin-container">
         <div class="admin-sidebar">
-            <h2>Admin Panel</h2>
+            <h2>📊 Admin Panel</h2>
             <nav class="admin-menu">
-                <a href="index.php">Tableau de bord</a>
-                <a href="news.php">Actualites</a>
-                <a href="members.php">Membres</a>
-                <a href="gallery.php" class="active">Galerie</a>
-                <a href="press.php">Presse</a>
-                <a href="videos.php">Videos</a>
-                <a href="messages.php">Messages</a>
-                <a href="../index.php" target="_blank">Voir le site</a>
-                <a href="?logout=1" style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">Deconnexion</a>
+                <a href="index.php">🏠 Tableau de bord</a>
+                <a href="news.php">📰 Actualités</a>
+                <a href="cinema.php">🎬 Cinema</a>
+                <a href="members.php">👥 Membres</a>
+                <a href="gallery.php" class="active">📸 Galerie</a>
+                <a href="press.php">📄 Presse</a>
+                <a href="videos.php">🎥 Vidéos</a>
+                <a href="messages.php">✉️ Messages</a>
+                <a href="../index.php" target="_blank">🌐 Voir le site</a>
+                <a href="?logout=1" style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">🚪 Déconnexion</a>
             </nav>
         </div>
 

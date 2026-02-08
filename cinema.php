@@ -238,9 +238,9 @@ include 'includes/header.php';
 }
 
 .cinema-films-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .cinema-card {
@@ -249,6 +249,7 @@ include 'includes/header.php';
     overflow: hidden;
     box-shadow: var(--shadow-md);
     display: flex;
+    width: 100%;
     transition: transform 0.3s, box-shadow 0.3s;
 }
 .cinema-card:hover {
@@ -263,8 +264,8 @@ include 'includes/header.php';
 }
 
 .cinema-card-poster {
-    width: 130px;
-    min-height: 180px;
+    width: 180px;
+    min-height: 240px;
     flex-shrink: 0;
     position: relative;
     overflow: hidden;
@@ -287,36 +288,36 @@ include 'includes/header.php';
 }
 .cinema-card-date {
     position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
+    top: 0.75rem;
+    left: 0.75rem;
     background: var(--primary-color);
     color: white;
-    border-radius: var(--radius-sm);
-    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-md);
+    padding: 0.35rem 0.6rem;
     text-align: center;
     line-height: 1.1;
     box-shadow: var(--shadow-md);
 }
 .cinema-day {
     display: block;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     font-weight: 700;
 }
 .cinema-month-short {
     display: block;
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
 .cinema-card-body {
-    padding: 1rem;
+    padding: 1.25rem 1.5rem;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 .cinema-card-title {
-    font-size: 1.05rem;
+    font-size: 1.35rem;
     margin: 0 0 0.5rem;
     color: var(--text-primary);
     line-height: 1.3;
@@ -324,35 +325,36 @@ include 'includes/header.php';
 .cinema-card-meta {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-bottom: 0.5rem;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
     align-items: center;
 }
 .cinema-meta-item {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
 }
 .cinema-genre-tag {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     background: var(--background-light);
     color: var(--primary-color);
-    padding: 0.15rem 0.5rem;
+    padding: 0.2rem 0.6rem;
     border-radius: 999px;
     font-weight: 600;
     border: 1px solid var(--border-color);
 }
 .cinema-card-desc {
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     color: var(--text-secondary);
-    line-height: 1.5;
-    margin: 0 0 0.75rem;
+    line-height: 1.6;
+    margin: 0 0 1rem;
     flex: 1;
 }
 .cinema-card-footer {
     margin-top: auto;
     display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    align-items: center;
 }
 .cinema-card-schedule {
     display: flex;
@@ -360,37 +362,44 @@ include 'includes/header.php';
     align-items: center;
 }
 .cinema-schedule-day {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: var(--primary-color);
 }
 .cinema-schedule-time {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 700;
     background: var(--secondary-color);
     color: white;
-    padding: 0.1rem 0.4rem;
+    padding: 0.15rem 0.5rem;
     border-radius: var(--radius-sm);
 }
 .cinema-card-location {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--text-secondary);
 }
 .cinema-card-duration {
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     color: var(--text-secondary);
 }
 
 @media (max-width: 768px) {
-    .cinema-films-grid {
-        grid-template-columns: 1fr;
+    .cinema-card {
+        flex-direction: column;
     }
     .cinema-card-poster {
-        width: 100px;
-        min-height: 150px;
+        width: 100%;
+        min-height: 200px;
+        max-height: 280px;
+    }
+    .cinema-card-body {
+        padding: 1rem;
     }
     .cinema-card-title {
-        font-size: 0.95rem;
+        font-size: 1.15rem;
+    }
+    .cinema-card-desc {
+        font-size: 0.85rem;
     }
 }
 </style>
