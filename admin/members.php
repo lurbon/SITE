@@ -173,6 +173,7 @@ $members = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC
             <nav class="admin-menu">
                 <a href="index.php">🏠 Tableau de bord</a>
                 <a href="news.php">📰 Actualités</a>
+                <a href="cinema.php">🎬 Cinema</a>
                 <a href="members.php" class="active">👥 Membres</a>
                 <a href="gallery.php">📸 Galerie</a>
                 <a href="press.php">📄 Presse</a>

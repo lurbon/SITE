@@ -68,6 +68,22 @@ CREATE TABLE IF NOT EXISTS admins (
     last_login DATETIME
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+-- Table des sorties cinema
+CREATE TABLE IF NOT EXISTS cinema (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    image VARCHAR(255),
+    director VARCHAR(150),
+    genre VARCHAR(100),
+    duration INT,
+    session_date DATE NOT NULL,
+    session_time VARCHAR(10),
+    location VARCHAR(255),
+    published BOOLEAN DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- Table des messages de contact
 CREATE TABLE IF NOT EXISTS contact_messages (
     id INT AUTO_INCREMENT PRIMARY KEY,

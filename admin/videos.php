@@ -46,6 +46,7 @@ $videos = $pdo->query("SELECT * FROM videos ORDER BY created_at DESC")->fetchAll
             <nav class="admin-menu">
                 <a href="index.php">🏠 Tableau de bord</a>
                 <a href="news.php">📰 Actualités</a>
+                <a href="cinema.php">🎬 Cinema</a>
                 <a href="members.php">👥 Membres</a>
                 <a href="gallery.php">📸 Galerie</a>
                 <a href="press.php">📄 Presse</a>

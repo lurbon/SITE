@@ -77,6 +77,7 @@ $press = $pdo->query("SELECT * FROM press ORDER BY article_date DESC, created_at
             <nav class="admin-menu">
                 <a href="index.php">🏠 Tableau de bord</a>
                 <a href="news.php">📰 Actualités</a>
+                <a href="cinema.php">🎬 Cinema</a>
                 <a href="members.php">👥 Membres</a>
                 <a href="gallery.php">📸 Galerie</a>
                 <a href="press.php" class="active">📄 Presse</a>

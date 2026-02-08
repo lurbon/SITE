@@ -5,6 +5,12 @@ require_once 'includes/config.php';
 $stmt = $pdo->query("SELECT * FROM news WHERE published = 1 ORDER BY created_at DESC LIMIT 3");
 $latest_news = $stmt->fetchAll();
 
+// Recuperer les 3 prochaines sorties cinema
+$today = date('Y-m-d');
+$stmt = $pdo->prepare("SELECT * FROM cinema WHERE published = 1 AND session_date >= ? ORDER BY session_date ASC LIMIT 3");
+$stmt->execute([$today]);
+$next_cinema = $stmt->fetchAll();
+
 $page_title = "Accueil";
 include 'includes/header.php';
 ?>
@@ -119,6 +125,56 @@ include 'includes/header.php';
         </div>
         <div style="text-align: center; margin-top: 2rem;">
             <a href="actualites.php" class="btn btn-secondary">Voir toutes les actualités</a>
+        </div>
+    </div>
+</section>
+<?php endif; ?>
+
+<!-- Prochaines sorties cinema -->
+<?php if (!empty($next_cinema)): ?>
+<section class="section section-light">
+    <div class="container">
+        <div class="section-title">
+            <h2>Prochaines sorties cinema</h2>
+        </div>
+        <div class="cards-grid">
+            <?php
+            $mois_court = ['jan','fev','mar','avr','mai','jun','jul','aou','sep','oct','nov','dec'];
+            foreach ($next_cinema as $film): ?>
+            <div class="card" style="display: flex; flex-direction: row; overflow: hidden;">
+                <div style="width: 120px; flex-shrink: 0; position: relative; background: var(--background-dark);">
+                    <?php if ($film['image']): ?>
+                        <img src="uploads/cinema/<?php echo htmlspecialchars($film['image']); ?>"
+                             alt="<?php echo htmlspecialchars($film['title']); ?>"
+                             style="width: 100%; height: 100%; object-fit: cover;">
+                    <?php endif; ?>
+                    <div style="position: absolute; top: 8px; left: 8px; background: var(--primary-color); color: white; border-radius: 6px; padding: 4px 8px; text-align: center; line-height: 1.1; box-shadow: var(--shadow-md);">
+                        <span style="display: block; font-size: 1.5rem; font-weight: 700;"><?php echo date('d', strtotime($film['session_date'])); ?></span>
+                        <span style="display: block; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em;"><?php echo $mois_court[(int)date('m', strtotime($film['session_date'])) - 1]; ?></span>
+                    </div>
+                </div>
+                <div class="card-content" style="flex: 1;">
+                    <h3 class="card-title" style="font-size: 1.15rem;"><?php echo htmlspecialchars($film['title']); ?></h3>
+                    <?php if ($film['director']): ?>
+                        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 0.25rem;">De <?php echo htmlspecialchars($film['director']); ?></div>
+                    <?php endif; ?>
+                    <?php if ($film['genre']): ?>
+                        <span style="font-size: 0.7rem; background: var(--background-light); color: var(--primary-color); padding: 0.15rem 0.5rem; border-radius: 999px; font-weight: 600; border: 1px solid var(--border-color);"><?php echo htmlspecialchars($film['genre']); ?></span>
+                    <?php endif; ?>
+                    <div style="margin-top: 0.75rem; font-size: 0.85rem;">
+                        <?php if ($film['session_time']): ?>
+                            <span style="font-weight: 600; color: var(--secondary-color);"><?php echo htmlspecialchars($film['session_time']); ?></span>
+                        <?php endif; ?>
+                        <?php if ($film['location']): ?>
+                            <span style="color: var(--text-secondary);"> - <?php echo htmlspecialchars($film['location']); ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="cinema.php" class="btn btn-primary">Voir tout le programme</a>
         </div>
     </div>
 </section>

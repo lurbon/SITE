@@ -39,6 +39,7 @@
                         </ul>
                     </li>
                     <li><a href="actualites.php">Les news</a></li>
+                    <li><a href="cinema.php">Cinema</a></li>
                     <li class="dropdown">
                         <a href="#">Médias</a>
                         <ul class="dropdown-menu">
