@@ -38,7 +38,8 @@
                             <li><a href="les-membres.php">Les membres</a></li>
                         </ul>
                     </li>
-                    <li><a href="actualites.php">Les news</a></li>
+                    <li><a href="actualites.php">News</a></li>
+                    <li><a href="cinema.php">Cinema</a></li>
                     <li class="dropdown">
                         <a href="#">Médias</a>
                         <ul class="dropdown-menu">
@@ -49,7 +50,7 @@
                     </li>
                     <li><a href="nous-rejoindre.php">Nous rejoindre</a></li>
                     <li><a href="contact.php">Contact</a></li>
-                    <li><a href="https://entraide-plus-iroise.fr/login.php" class="membre-link">Accès membre</a></li>
+                    <li><a href="https://entraide-plus-iroise.fr/login.php" class="membre-link">Membres</a></li>
                 </ul>
             </nav>
         </div>
