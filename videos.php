@@ -24,17 +24,71 @@ include 'includes/header.php';
             </div>
         <?php else: ?>
             <div class="videos-list">
-                <?php foreach ($videos as $video): ?>
+                <?php foreach ($videos as $video):
+                    $is_youtube = !empty($video['youtube_id']);
+                    $is_file = !empty($video['video_url']) && strpos($video['video_url'], 'uploads/') === 0;
+                    $is_url = !empty($video['video_url']) && !$is_file;
+                ?>
                     <div class="video-card">
                         <div class="video-player">
-                            <iframe
-                                src="https://www.youtube.com/embed/<?php echo htmlspecialchars($video['youtube_id']); ?>"
-                                title="<?php echo htmlspecialchars($video['title']); ?>"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                                loading="lazy">
-                            </iframe>
+                            <?php if ($is_youtube): ?>
+                                <iframe
+                                    src="https://www.youtube.com/embed/<?php echo htmlspecialchars($video['youtube_id']); ?>"
+                                    title="<?php echo htmlspecialchars($video['title']); ?>"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                    loading="lazy">
+                                </iframe>
+                            <?php elseif ($is_file): ?>
+                                <video controls preload="metadata">
+                                    <source src="<?php echo htmlspecialchars($video['video_url']); ?>">
+                                    Votre navigateur ne supporte pas la lecture video.
+                                </video>
+                            <?php elseif ($is_url): ?>
+                                <?php
+                                    // Detecter les plateformes connues pour embed
+                                    $url = $video['video_url'];
+                                    $embed_url = null;
+
+                                    // Dailymotion
+                                    if (preg_match('/dailymotion\.com\/video\/([a-zA-Z0-9]+)/', $url, $m)) {
+                                        $embed_url = 'https://www.dailymotion.com/embed/video/' . $m[1];
+                                    } elseif (preg_match('/dai\.ly\/([a-zA-Z0-9]+)/', $url, $m)) {
+                                        $embed_url = 'https://www.dailymotion.com/embed/video/' . $m[1];
+                                    }
+                                    // Vimeo
+                                    elseif (preg_match('/vimeo\.com\/(\d+)/', $url, $m)) {
+                                        $embed_url = 'https://player.vimeo.com/video/' . $m[1];
+                                    }
+                                    // URL directe video (mp4, webm, etc.)
+                                    elseif (preg_match('/\.(mp4|webm|ogg|mov)(\?|$)/i', $url)) {
+                                        $embed_url = null; // sera traite comme video native
+                                    }
+                                ?>
+                                <?php if ($embed_url): ?>
+                                    <iframe
+                                        src="<?php echo htmlspecialchars($embed_url); ?>"
+                                        title="<?php echo htmlspecialchars($video['title']); ?>"
+                                        frameborder="0"
+                                        allow="autoplay; fullscreen; picture-in-picture"
+                                        allowfullscreen
+                                        loading="lazy">
+                                    </iframe>
+                                <?php elseif (preg_match('/\.(mp4|webm|ogg|mov)(\?|$)/i', $url)): ?>
+                                    <video controls preload="metadata">
+                                        <source src="<?php echo htmlspecialchars($url); ?>">
+                                        Votre navigateur ne supporte pas la lecture video.
+                                    </video>
+                                <?php else: ?>
+                                    <div class="video-external-link">
+                                        <a href="<?php echo htmlspecialchars($url); ?>" target="_blank" rel="noopener">
+                                            <span class="video-play-icon">&#9654;</span>
+                                            <span>Voir la video</span>
+                                        </a>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endif; ?>
                         </div>
                         <div class="video-info">
                             <h2 class="video-title"><?php echo htmlspecialchars($video['title']); ?></h2>
@@ -77,12 +131,48 @@ include 'includes/header.php';
     padding-bottom: 56.25%; /* 16:9 */
     background: #000;
 }
-.video-player iframe {
+.video-player iframe,
+.video-player video {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+}
+
+.video-external-link {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+}
+.video-external-link a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: transform 0.3s;
+}
+.video-external-link a:hover {
+    transform: scale(1.05);
+    color: white;
+}
+.video-play-icon {
+    font-size: 3rem;
+    width: 80px;
+    height: 80px;
+    border: 3px solid white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 6px;
 }
 
 .video-info {
