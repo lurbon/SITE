@@ -346,6 +346,9 @@ img.card-image {
     object-fit: contain;
     background: var(--background-light);
     display: block;
+    border-radius: var(--radius-lg);
+    margin: var(--spacing-sm) auto 0;
+    width: calc(100% - var(--spacing-sm) * 2);
 }
 
 div.card-image {
