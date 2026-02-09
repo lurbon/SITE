@@ -342,7 +342,8 @@ img {
 .card-image {
     width: 100%;
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
+    background: var(--background-light);
 }
 
 .card-content {
