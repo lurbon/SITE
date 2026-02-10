@@ -28,19 +28,15 @@
                 <p><strong>Christiane Le Guen</strong></p>
                 <p>Présidente</p>
                 <p>📞 06.62.48.76.42</p>
-                <p>✉️ <a href="mailto:contact@entraide-plus-iroise.fr">contact@entraide-plus-iroise.fr</a></p>
+                <p>✉️ <a href="mailto:entraideplusiroise@gmail.com">entraideplusiroise@gmail.com</a></p>
             </div>
             
-            <div class="footer-section">
-                <h3>Horaires</h3>
-                <p>L'association fonctionne grâce à ses bénévoles.</p>
-                <p>Pour toute demande, contactez-nous par téléphone ou via notre formulaire de contact.</p>
-            </div>
         </div>
         
         <div class="footer-bottom">
             <p>&copy; <?php echo date('Y'); ?> Entraide Plus Iroise - Tous droits réservés | 
             <a href="mentions-legales.php">Mentions légales</a> | 
+            <a href="politique-confidentialite.php">Politique de confidentialité</a> | 
             <a href="admin/login.php">Administration</a></p>
         </div>
     </footer>
@@ -128,5 +124,8 @@
 
     <!-- JavaScript -->
     <script src="assets/js/main.js"></script>
+    
+    <!-- Bandeau de cookies -->
+    <script src="assets/js/cookie-consent-simple.js"></script>
 </body>
 </html>

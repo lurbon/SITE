@@ -1,6 +1,38 @@
 <?php
 require_once 'includes/config.php';
 $page_title = "Quelques chiffres";
+
+// Récupérer les données depuis la table EPI_chiffre (Type='Global' pour les indicateurs principaux)
+try {
+    $stmt = $pdo->prepare("SELECT KPI, Valeur FROM EPI_chiffre WHERE Type = 'Global' ");
+    $stmt->execute();
+    $chiffres_globaux = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch(PDOException $e) {
+    error_log("Erreur lors de la récupération des chiffres globaux: " . $e->getMessage());
+    $chiffres_globaux = [];
+}
+
+// Créer un tableau associatif pour faciliter l'accès aux valeurs
+$kpi = [];
+foreach($chiffres_globaux as $chiffre) {
+    $kpi[$chiffre['KPI']] = $chiffre['Valeur'];
+}
+
+// Récupérer les détails des interventions depuis la table EPI_chiffre (Type='Détail')
+try {
+    $stmt = $pdo->prepare("SELECT KPI, Valeur FROM EPI_chiffre WHERE Type = 'Détail' ");
+    $stmt->execute();
+    $details = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Debug: afficher le nombre de résultats
+    error_log("Nombre de détails récupérés: " . count($details));
+    if(count($details) > 0) {
+        error_log("Premier détail: " . print_r($details[0], true));
+    }
+} catch(PDOException $e) {
+    error_log("Erreur lors de la récupération des détails: " . $e->getMessage());
+    $details = [];
+}
+
 include 'includes/header.php';
 ?>
 
@@ -15,47 +47,33 @@ include 'includes/header.php';
 <!-- Statistiques principales -->
 <section class="section">
     <div class="container">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 4rem;">
-            <div style="background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); 
-                        color: white; padding: 3rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-xl);">
-                <div class="counter" data-target="15" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
-                <h3 style="color: white; font-size: 1.25rem; margin: 0;">Années d'existence</h3>
-                <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 0.875rem;">Depuis 2010</p>
-            </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; max-width: 1200px; margin-left: auto; margin-right: auto;">
+            <?php
+            // Palette de couleurs pour les cadres globaux
+            $couleurs_globales = [
+                ['primary' => 'var(--primary-color)', 'light' => 'var(--primary-light)'],
+                ['primary' => 'var(--secondary-color)', 'light' => 'var(--secondary-light)'],
+                ['primary' => 'var(--secondary-color)', 'light' => 'var(--secondary-light)'],
+                ['primary' => '#f59e0b', 'light' => '#fbbf24'],
+                ['primary' => '#8b5cf6', 'light' => '#a78bfa'],
+                ['primary' => '#8b5cf6', 'light' => '#a78bfa'],
+                ['primary' => '#10b981', 'light' => '#34d399'],
+                ['primary' => '#ef4444', 'light' => '#f87171']
+            ];
             
-            <div style="background: linear-gradient(135deg, var(--secondary-color), var(--secondary-light)); 
-                        color: white; padding: 3rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-xl);">
-                <div class="counter" data-target="90" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
-                <h3 style="color: white; font-size: 1.25rem; margin: 0;">Bénévoles</h3>
-                <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 0.875rem;">Toujours plus nombreux</p>
+            $index = 0;
+            foreach($chiffres_globaux as $chiffre):
+                $kpi_name = $chiffre['KPI'];
+                $valeur = intval($chiffre['Valeur']);
+                $couleur = $couleurs_globales[$index % count($couleurs_globales)];
+                $index++;
+            ?>
+            <div style="background: linear-gradient(135deg, <?php echo $couleur['primary']; ?>, <?php echo $couleur['light']; ?>); 
+                        color: white; padding: 2rem 1.5rem; border-radius: var(--radius-lg); text-align: center; box-shadow: var(--shadow-lg);">
+                <div class="counter" data-target="<?php echo $valeur; ?>" style="font-size: 3rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
+                <h3 style="color: white; font-size: 1rem; margin: 0; line-height: 1.3;"><?php echo htmlspecialchars($kpi_name); ?></h3>
             </div>
-			
-              <div style="background: linear-gradient(135deg, var(--secondary-color), var(--secondary-light)); 
-                        color: white; padding: 3rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-xl);">
-                <div class="counter" data-target="300" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
-                <h3 style="color: white; font-size: 1.25rem; margin: 0;">Aidés</h3>
-                <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 0.875rem;"></p>
-            </div>          
-            <div style="background: linear-gradient(135deg, #f59e0b, #fbbf24); 
-                        color: white; padding: 3rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-xl);">
-                <div class="counter" data-target="1812" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
-                <h3 style="color: white; font-size: 1.25rem; margin: 0;">Interventions par an</h3>
-                <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 0.875rem;">En constante progression</p>
-            </div>
-            
-            <div style="background: linear-gradient(135deg, #8b5cf6, #a78bfa); 
-                        color: white; padding: 3rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-xl);">
-                <div class="counter" data-target="11" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
-                <h3 style="color: white; font-size: 1.25rem; margin: 0;">Communes desservies</h3>
-                <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 0.875rem;"></p>
-            </div>
-			
-			            <div style="background: linear-gradient(135deg, #8b5cf6, #a78bfa); 
-                        color: white; padding: 3rem 2rem; border-radius: var(--radius-xl); text-align: center; box-shadow: var(--shadow-xl);">
-                <div class="counter" data-target="50000" style="font-size: 4rem; font-weight: 800; margin-bottom: 0.5rem;">0</div>
-                <h3 style="color: white; font-size: 1.25rem; margin: 0;">Km parcourus</h3>
-                <p style="opacity: 0.9; margin-top: 0.5rem; font-size: 0.875rem;">Et toujours en croissance</p>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -68,66 +86,60 @@ include 'includes/header.php';
         </div>
         
         <div style="max-width: 900px; margin: 0 auto;">
+            <!-- Debug: afficher le nombre de résultats -->
+            <?php if(empty($details)): ?>
+                <div style="background: #fee; border: 2px solid #f00; padding: 1rem; margin-bottom: 2rem; border-radius: 8px;">
+                    <strong>DEBUG:</strong> Aucune donnée trouvée. Le tableau $details est vide.
+                    <br>Nombre de résultats: <?php echo count($details); ?>
+                </div>
+            <?php else: ?>
+                <div style="background: #efe; border: 2px solid #0f0; padding: 1rem; margin-bottom: 2rem; border-radius: 8px;">
+                    <strong>DEBUG:</strong> <?php echo count($details); ?> résultat(s) trouvé(s).
+                    <br>Premier KPI: <?php echo isset($details[0]['KPI']) ? $details[0]['KPI'] : 'N/A'; ?>
+                </div>
+            <?php endif; ?>
+            
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
-                <!-- Transport -->
-                <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="background: var(--primary-color); color: white; width: 60px; height: 60px; 
-                                    border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                            🚗
-                        </div>
-                        <h3 style="color: var(--primary-color); margin: 0;">Transport</h3>
-                    </div>
-                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--primary-color); margin-bottom: 0.5rem;">
-                        <span class="counter" data-target="400">0</span>+
-                    </div>
-                    <p style="color: var(--text-secondary);">Déplacements effectués par an</p>
-                </div>
+                <?php
+                // Palette de couleurs pour assigner dynamiquement
+                $couleurs = [
+                    'var(--primary-color)',
+                    'var(--secondary-color)',
+                    '#f59e0b',
+                    '#ef4444',
+                    '#8b5cf6',
+                    '#10b981',
+                    '#06b6d4',
+                    '#f97316'
+                ];
                 
-                <!-- Aide à domicile -->
-                <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="background: var(--secondary-color); color: white; width: 60px; height: 60px; 
-                                    border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                            🏠
-                        </div>
-                        <h3 style="color: var(--secondary-color); margin: 0;">Aide à domicile</h3>
-                    </div>
-                    <div style="font-size: 2.5rem; font-weight: 700; color: var(--secondary-color); margin-bottom: 0.5rem;">
-                        <span class="counter" data-target="150">0</span>+
-                    </div>
-                    <p style="color: var(--text-secondary);">Interventions à domicile par an</p>
-                </div>
+                // Palette d'icônes pour assigner dynamiquement
+                $icones = ['📊', '📋', '🛒', '🎨', '⚕️', '🏠', '❤️', '🚗', '⏰', '💼'];
                 
-                <!-- Visites -->
+                // Afficher les cartes dynamiquement
+                $index = 0;
+                foreach($details as $detail):
+                    $kpi_name = $detail['KPI'];
+                    $valeur = intval($detail['Valeur']);
+                    
+                    // Assigner automatiquement une couleur et une icône basées sur l'index
+                    $couleur = $couleurs[$index % count($couleurs)];
+                    $icone = $icones[$index % count($icones)];
+                    $index++;
+                ?>
                 <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
                     <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="background: #f59e0b; color: white; width: 60px; height: 60px; 
+                        <div style="background: <?php echo $couleur; ?>; color: white; width: 60px; height: 60px; 
                                     border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                            ❤️
+                            <?php echo $icone; ?>
                         </div>
-                        <h3 style="color: #f59e0b; margin: 0;">Visites</h3>
+                        <h3 style="color: <?php echo $couleur; ?>; margin: 0;"><?php echo htmlspecialchars($kpi_name); ?></h3>
                     </div>
-                    <div style="font-size: 2.5rem; font-weight: 700; color: #f59e0b; margin-bottom: 0.5rem;">
-                        <span class="counter" data-target="50">0</span>+
+                    <div style="font-size: 2.5rem; font-weight: 700; color: <?php echo $couleur; ?>; margin-bottom: 0.5rem;">
+                        <span class="counter" data-target="<?php echo $valeur; ?>">0</span>+
                     </div>
-                    <p style="color: var(--text-secondary);">Visites de courtoisie mensuelles</p>
                 </div>
-                
-                <!-- Heures de bénévolat -->
-                <div style="background: white; padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md);">
-                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
-                        <div style="background: #8b5cf6; color: white; width: 60px; height: 60px; 
-                                    border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; font-size: 2rem;">
-                            ⏰
-                        </div>
-                        <h3 style="color: #8b5cf6; margin: 0;">Temps donné</h3>
-                    </div>
-                    <div style="font-size: 2.5rem; font-weight: 700; color: #8b5cf6; margin-bottom: 0.5rem;">
-                        <span class="counter" data-target="2000">0</span>+
-                    </div>
-                    <p style="color: var(--text-secondary);">Heures de bénévolat par an</p>
-                </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>
@@ -151,7 +163,7 @@ include 'includes/header.php';
                         <div>
                             <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">Personnes aidées</h3>
                             <p style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
-                                <span class="counter" data-target="200">0</span>+ personnes
+                                <span class="counter" data-target="<?php echo isset($kpi["Nombre d'aidés"]) ? intval($kpi["Nombre d'aidés"]) : 200; ?>">0</span>+ personnes
                             </p>
                             <p style="color: var(--text-secondary);">bénéficient de nos services chaque année</p>
                         </div>
@@ -165,11 +177,11 @@ include 'includes/header.php';
                             🏘️
                         </div>
                         <div>
-                            <h3 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Couverture territoriale</h3>
+                            <h3 style="color: var(--secondary-color); margin-bottom: 0.5rem;">Distance parcourue</h3>
                             <p style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
-                                <span class="counter" data-target="15000">0</span> km²
+                                <span class="counter" data-target="<?php echo isset($kpi['Nombre de kilomètres']) ? intval($kpi['Nombre de kilomètres']) : 50000; ?>">0</span> km
                             </p>
-                            <p style="color: var(--text-secondary);">de territoire couvert par nos bénévoles</p>
+                            <p style="color: var(--text-secondary);">parcourus par nos bénévoles chaque année</p>
                         </div>
                     </div>
                     
@@ -181,11 +193,11 @@ include 'includes/header.php';
                             💪
                         </div>
                         <div>
-                            <h3 style="color: #f59e0b; margin-bottom: 0.5rem;">Taux de satisfaction</h3>
+                            <h3 style="color: #f59e0b; margin-bottom: 0.5rem;">Bénévoles actifs</h3>
                             <p style="font-size: 2rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem;">
-                                <span class="counter" data-target="98">0</span>%
+                                <span class="counter" data-target="<?php echo isset($kpi['Nombre de bénévoles']) ? intval($kpi['Nombre de bénévoles']) : 90; ?>">0</span>
                             </p>
-                            <p style="color: var(--text-secondary);">de nos bénéficiaires se disent satisfaits</p>
+                            <p style="color: var(--text-secondary);">bénévoles dévoués à votre service</p>
                         </div>
                     </div>
                 </div>
@@ -198,7 +210,7 @@ include 'includes/header.php';
 <section class="section section-light">
     <div class="container">
         <div style="max-width: 700px; margin: 0 auto; text-align: center;">
-            <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;">❝</div>
+            <div style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;">"</div>
             <p style="font-size: 1.5rem; line-height: 1.6; color: var(--text-primary); font-style: italic; margin-bottom: 2rem;">
                 Ces chiffres représentent avant tout des histoires humaines, des sourires retrouvés 
                 et des liens tissés au sein de notre communauté.
@@ -226,6 +238,25 @@ include 'includes/header.php';
 </section>
 
 <style>
+/* Grille responsive pour les cartes de statistiques */
+@media (min-width: 1024px) {
+    section div[style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+    section div[style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 639px) {
+    section div[style*="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr))"] {
+        grid-template-columns: 1fr !important;
+    }
+}
+
 @media (max-width: 768px) {
     section div[style*="grid-template-columns: 1fr 1fr"] {
         grid-template-columns: 1fr !important;

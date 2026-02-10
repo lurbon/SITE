@@ -1,8 +1,20 @@
 <?php
 require_once 'includes/config.php';
 
-// Récupérer les membres du bureau
-$stmt = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC");
+// Récupérer les membres avec un rôle de 1 à 4 depuis la table EPI_user
+$stmt = $pdo->query("
+    SELECT 
+        ID,
+        user_nicename as name,
+        user_role as role,
+        user_photo as photo,
+        user_email as email,
+        user_phone as phone,
+        user_bio as bio
+    FROM EPI_user 
+    WHERE user_rang IN (1,2,3,4)
+    ORDER BY CAST(user_rang AS UNSIGNED) ASC, user_nicename ASC
+");
 $members = $stmt->fetchAll();
 
 $page_title = "Les membres du bureau";
@@ -43,10 +55,11 @@ include 'includes/header.php';
                     <div style="margin-bottom: 3rem;">
                         <div style="display: grid; grid-template-columns: <?php echo $isEven ? '1fr 2fr' : '2fr 1fr'; ?>; 
                                     gap: 3rem; align-items: center; background: white; padding: 2rem; 
-                                    border-radius: var(--radius-xl); box-shadow: var(--shadow-lg);">
+                                    border-radius: var(--radius-xl); box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+                                    border: 2px solid #e0e0e0;">
                             
                             <div style="order: <?php echo $isEven ? '1' : '2'; ?>;">
-                                <?php if ($member['photo']): ?>
+                                <?php if ($member['photo'] && file_exists('uploads/members/' . $member['photo'])): ?>
                                     <img src="uploads/members/<?php echo htmlspecialchars($member['photo']); ?>" 
                                          alt="<?php echo htmlspecialchars($member['name']); ?>"
                                          style="width: 100%; aspect-ratio: 1; object-fit: cover; 
@@ -61,9 +74,8 @@ include 'includes/header.php';
                             </div>
                             
                             <div style="order: <?php echo $isEven ? '2' : '1'; ?>;">
-                                <div style="display: inline-block; padding: 0.5rem 1rem; background: <?php echo $color; ?>20; 
-                                            color: <?php echo $color; ?>; border-radius: var(--radius-md); font-weight: 600; 
-                                            font-size: 0.875rem; margin-bottom: 1rem;">
+                                <div style="color: #8BC34A; font-weight: 700; 
+                                            font-size: 1.5rem; margin-bottom: 1rem;">
                                     <?php echo htmlspecialchars($member['role']); ?>
                                 </div>
                                 
@@ -89,6 +101,7 @@ include 'includes/header.php';
                                             ✉️ Email
                                         </a>
                                     <?php endif; ?>
+   
                                     
                                     <?php if ($member['phone']): ?>
                                         <a href="tel:<?php echo htmlspecialchars(str_replace([' ', '.'], '', $member['phone'])); ?>" 

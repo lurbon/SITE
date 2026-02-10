@@ -92,7 +92,7 @@ include 'includes/header.php';
             <?php if (!empty($upcoming_cinema)): ?>
                 <div style="margin-bottom: 3rem;">
                     <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.5rem;">
-                        <h2 style="margin: 0; color: var(--primary-color);">Prochaines sorties cinema</h2>
+                        <h2 style="margin: 0; color: var(--primary-color);">Minibus - Cinema - Saint-Renan</h2>
                         <a href="cinema.php" style="font-size: 0.9rem; font-weight: 500;">Voir tout le programme &rarr;</a>
                     </div>
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">

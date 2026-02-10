@@ -20,6 +20,8 @@ include 'includes/header.php';
     <div class="hero-content">
         <h1>Bienvenue à Entraide Plus Iroise</h1>
         <p>Association d'entraide et de solidarité au service des personnes isolées depuis 2010</p>
+		<p>sur les communes de</p>
+		<p>Landunvez, Ploudalmézeau-Portsall, Lampaul-Ploudalmézeau, Saint-Pabu, Porspoder, Lanildut, Brélès, Plourin, Plouguin et Tréouergat</p>
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem;">
             <a href="nous-rejoindre.php" class="btn btn-primary">Devenir bénévole</a>
             <a href="contact.php" class="btn btn-outline">Nous contacter</a>

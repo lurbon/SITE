@@ -7,49 +7,49 @@ $message_type = '';
 
 // Supprimer un membre
 if (isset($_GET['delete'])) {
-    $id = (int)$_GET['delete'];
-    $stmt = $pdo->prepare("SELECT photo FROM members WHERE id = ?");
-    $stmt->execute([$id]);
+    $ID = (int)$_GET['delete'];
+    $stmt = $pdo->prepare("SELECT user_photo FROM EPI_user WHERE ID = ?");
+    $stmt->execute([$ID]);
     $member = $stmt->fetch();
     
-    if ($member && $member['photo']) {
-        @unlink('../uploads/members/' . $member['photo']);
+    if ($member && $member['user_photo']) {
+        @unlink('../uploads/members/' . $member['user_photo']);
     }
     
-    $stmt = $pdo->prepare("DELETE FROM members WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt = $pdo->prepare("DELETE FROM EPI_user WHERE ID = ?");
+    $stmt->execute([$ID]);
     $message = "Membre supprimé avec succès";
     $message_type = 'success';
 }
 
 // Ajouter ou modifier un membre
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $id = $_POST['id'] ?? null;
-    $name = $_POST['name'] ?? '';
-    $role = $_POST['role'] ?? '';
-    $bio = $_POST['bio'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $phone = $_POST['phone'] ?? '';
-    $display_order = (int)($_POST['display_order'] ?? 0);
+    $ID = $_POST['ID'] ?? null;
+    $name = $_POST['user_nicename'] ?? '';
+    $role = $_POST['user_role'] ?? '';
+    $bio = $_POST['user_bio'] ?? '';
+    $email = $_POST['user_email'] ?? '';
+    $phone = $_POST['user_phone'] ?? '';
+    $display_order = (int)($_POST['user_rang'] ?? 0);
     $current_photo = $_POST['current_photo'] ?? '';
     
     $photo = $current_photo;
     
     // Upload de la photo
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
+    if (isset($_FILES['user_photo']) && $_FILES['user_photo']['error'] === 0) {
         $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        $filename = $_FILES['photo']['name'];
+        $filename = $_FILES['user_photo']['name'];
         $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
         
         if (in_array($ext, $allowed)) {
-            $new_filename = uniqid() . '.' . $ext;
+            $new_filename = uniqID() . '.' . $ext;
             
             // Créer le dossier s'il n'existe pas
             if (!file_exists('../uploads/members')) {
                 mkdir('../uploads/members', 0755, true);
             }
             
-            if (move_uploaded_file($_FILES['photo']['tmp_name'], '../uploads/members/' . $new_filename)) {
+            if (move_uploaded_file($_FILES['user_photo']['tmp_name'], '../uploads/members/' . $new_filename)) {
                 if ($current_photo && file_exists('../uploads/members/' . $current_photo)) {
                     @unlink('../uploads/members/' . $current_photo);
                 }
@@ -59,12 +59,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     try {
-        if ($id) {
-            $stmt = $pdo->prepare("UPDATE members SET name = ?, role = ?, photo = ?, bio = ?, email = ?, phone = ?, display_order = ? WHERE id = ?");
-            $stmt->execute([$name, $role, $photo, $bio, $email, $phone, $display_order, $id]);
+        if ($ID) {
+            $stmt = $pdo->prepare("UPDATE EPI_user SET user_nicename = ?, user_role = ?, user_photo = ?, user_bio = ?, user_email = ?, user_phone = ?, user_rang = ? WHERE ID = ?");
+            $stmt->execute([$name, $role, $photo, $bio, $email, $phone, $display_order, $ID]);
             $message = "Membre modifié avec succès";
         } else {
-            $stmt = $pdo->prepare("INSERT INTO members (name, role, photo, bio, email, phone, display_order) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO EPI_user (user_nicename, user_role, user_photo, user_bio, user_email, user_phone, user_rang) VALUES (?, ?, ?, ?, ?, ?, ?)");
             $stmt->execute([$name, $role, $photo, $bio, $email, $phone, $display_order]);
             $message = "Membre ajouté avec succès";
         }
@@ -77,29 +77,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $edit_member = null;
 if (isset($_GET['edit'])) {
-    $stmt = $pdo->prepare("SELECT * FROM members WHERE id = ?");
+    $stmt = $pdo->prepare("SELECT * FROM EPI_user WHERE ID = ?");
     $stmt->execute([$_GET['edit']]);
     $edit_member = $stmt->fetch();
 }
 
-$members = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC")->fetchAll();
+$members = $pdo->query("SELECT * FROM EPI_user ORDER BY user_rang ASC, ID ASC")->fetchAll();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="wIDth=device-wIDth, initial-scale=1.0">
     <title>Gestion des membres - Administration</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         .admin-container { display: flex; min-height: 100vh; }
-        .admin-sidebar {
-            width: 250px;
+        .admin-sIDebar {
+            wIDth: 250px;
             background: var(--text-primary);
             color: white;
             padding: 2rem 0;
         }
-        .admin-sidebar h2 {
+        .admin-sIDebar h2 {
             color: white;
             padding: 0 1.5rem;
             margin-bottom: 2rem;
@@ -110,7 +110,7 @@ $members = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC
             color: rgba(255,255,255,0.8);
             text-decoration: none;
             transition: all 0.3s;
-            border-left: 3px solid transparent;
+            border-left: 3px solID transparent;
         }
         .admin-menu a:hover,
         .admin-menu a.active {
@@ -133,23 +133,23 @@ $members = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC
             align-items: center;
         }
         .form-image-preview {
-            max-width: 150px;
+            max-wIDth: 150px;
             margin-top: 1rem;
             border-radius: 50%;
             aspect-ratio: 1;
             object-fit: cover;
         }
         table {
-            width: 100%;
+            wIDth: 100%;
             background: white;
             border-radius: var(--radius-lg);
-            overflow: hidden;
+            overflow: hIDden;
             box-shadow: var(--shadow-md);
         }
         table th, table td {
             padding: 1rem;
             text-align: left;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solID var(--border-color);
         }
         table th {
             background: var(--background-dark);
@@ -159,7 +159,7 @@ $members = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC
             border-bottom: none;
         }
         table img {
-            width: 60px;
+            wIDth: 60px;
             height: 60px;
             object-fit: cover;
             border-radius: 50%;
@@ -168,7 +168,7 @@ $members = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC
 </head>
 <body>
     <div class="admin-container">
-        <div class="admin-sidebar">
+        <div class="admin-sIDebar">
             <h2>📊 Admin Panel</h2>
             <nav class="admin-menu">
                 <a href="index.php">🏠 Tableau de bord</a>
@@ -177,10 +177,10 @@ $members = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC
                 <a href="members.php" class="active">👥 Membres</a>
                 <a href="gallery.php">📸 Galerie</a>
                 <a href="press.php">📄 Presse</a>
-                <a href="videos.php">🎥 Vidéos</a>
+                <a href="vIDeos.php">🎥 VIDéos</a>
                 <a href="messages.php">✉️ Messages</a>
                 <a href="../index.php" target="_blank">🌐 Voir le site</a>
-                <a href="?logout=1" style="margin-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
+                <a href="?logout=1" style="margin-top: 2rem; border-top: 1px solID rgba(255,255,255,0.1); padding-top: 1rem;">
                     🚪 Déconnexion
                 </a>
             </nav>
@@ -201,55 +201,55 @@ $members = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC
                 <h2><?php echo $edit_member ? 'Modifier le membre' : 'Ajouter un membre'; ?></h2>
                 <form method="POST" enctype="multipart/form-data">
                     <?php if ($edit_member): ?>
-                        <input type="hidden" name="id" value="<?php echo $edit_member['id']; ?>">
-                        <input type="hidden" name="current_photo" value="<?php echo htmlspecialchars($edit_member['photo']); ?>">
+                        <input type="hIDden" name="ID" value="<?php echo $edit_member['ID']; ?>">
+                        <input type="hIDden" name="current_photo" value="<?php echo htmlspecialchars($edit_member['user_photo']); ?>">
                     <?php endif; ?>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="display: grID; grID-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
                             <label class="form-label">Nom complet *</label>
-                            <input type="text" name="name" class="form-control" 
-                                   value="<?php echo htmlspecialchars($edit_member['name'] ?? ''); ?>" required>
+                            <input type="text" name="user_nicename" class="form-control" 
+                                   value="<?php echo htmlspecialchars($edit_member['user_nicename'] ?? ''); ?>" required>
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Fonction *</label>
-                            <input type="text" name="role" class="form-control" 
-                                   value="<?php echo htmlspecialchars($edit_member['role'] ?? ''); ?>" 
-                                   placeholder="Ex: Président(e)" required>
+                            <input type="text" name="user_role" class="form-control" 
+                                   value="<?php echo htmlspecialchars($edit_member['user_role'] ?? ''); ?>" 
+                                   placeholder="Ex: PrésIDent(e)" required>
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">Biographie</label>
-                        <textarea name="bio" class="form-control" rows="4"><?php echo htmlspecialchars($edit_member['bio'] ?? ''); ?></textarea>
+                        <textarea name="user_bio" class="form-control" rows="4"><?php echo htmlspecialchars($edit_member['user_bio'] ?? ''); ?></textarea>
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                    <div style="display: grID; grID-template-columns: 1fr 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
                             <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" 
-                                   value="<?php echo htmlspecialchars($edit_member['email'] ?? ''); ?>">
+                            <input type="email" name="user_email" class="form-control" 
+                                   value="<?php echo htmlspecialchars($edit_member['user_email'] ?? ''); ?>">
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Téléphone</label>
-                            <input type="text" name="phone" class="form-control" 
-                                   value="<?php echo htmlspecialchars($edit_member['phone'] ?? ''); ?>">
+                            <input type="text" name="user_phone" class="form-control" 
+                                   value="<?php echo htmlspecialchars($edit_member['user_phone'] ?? ''); ?>">
                         </div>
                         
                         <div class="form-group">
                             <label class="form-label">Ordre d'affichage</label>
-                            <input type="number" name="display_order" class="form-control" 
-                                   value="<?php echo htmlspecialchars($edit_member['display_order'] ?? 0); ?>">
+                            <input type="number" name="user_rang" class="form-control" 
+                                   value="<?php echo htmlspecialchars($edit_member['user_rang'] ?? 0); ?>">
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label class="form-label">Photo</label>
-                        <input type="file" name="photo" class="form-control" accept="image/*">
-                        <?php if ($edit_member && $edit_member['photo']): ?>
-                            <img src="../uploads/members/<?php echo htmlspecialchars($edit_member['photo']); ?>" 
+                        <input type="file" name="user_photo" class="form-control" accept="image/*">
+                        <?php if ($edit_member && $edit_member['user_photo']): ?>
+                            <img src="../uploads/members/<?php echo htmlspecialchars($edit_member['user_photo']); ?>" 
                                  class="form-image-preview">
                         <?php endif; ?>
                     </div>
@@ -286,30 +286,30 @@ $members = $pdo->query("SELECT * FROM members ORDER BY display_order ASC, id ASC
                         <?php foreach ($members as $member): ?>
                             <tr>
                                 <td>
-                                    <?php if ($member['photo']): ?>
-                                        <img src="../uploads/members/<?php echo htmlspecialchars($member['photo']); ?>">
+                                    <?php if ($member['user_photo']): ?>
+                                        <img src="../uploads/members/<?php echo htmlspecialchars($member['user_photo']); ?>">
                                     <?php else: ?>
-                                        <div style="width: 60px; height: 60px; background: var(--primary-color); 
+                                        <div style="wIDth: 60px; height: 60px; background: var(--primary-color); 
                                                     border-radius: 50%; display: flex; align-items: center; 
                                                     justify-content: center; color: white; font-size: 1.5rem;">👤</div>
                                     <?php endif; ?>
                                 </td>
-                                <td><strong><?php echo htmlspecialchars($member['name']); ?></strong></td>
-                                <td><?php echo htmlspecialchars($member['role']); ?></td>
+                                <td><strong><?php echo htmlspecialchars($member['user_nicename']); ?></strong></td>
+                                <td><?php echo htmlspecialchars($member['user_role']); ?></td>
                                 <td>
-                                    <?php if ($member['email']): ?>
-                                        <div><?php echo htmlspecialchars($member['email']); ?></div>
+                                    <?php if ($member['user_email']): ?>
+                                        <div><?php echo htmlspecialchars($member['user_email']); ?></div>
                                     <?php endif; ?>
-                                    <?php if ($member['phone']): ?>
-                                        <div><?php echo htmlspecialchars($member['phone']); ?></div>
+                                    <?php if ($member['user_phone']): ?>
+                                        <div><?php echo htmlspecialchars($member['user_phone']); ?></div>
                                     <?php endif; ?>
                                 </td>
-                                <td><?php echo $member['display_order']; ?></td>
+                                <td><?php echo $member['user_rang']; ?></td>
                                 <td>
-                                    <a href="?edit=<?php echo $member['id']; ?>" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                                    <a href="?edit=<?php echo $member['ID']; ?>" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
                                         Modifier
                                     </a>
-                                    <a href="?delete=<?php echo $member['id']; ?>" 
+                                    <a href="?delete=<?php echo $member['ID']; ?>" 
                                        onclick="return confirm('Supprimer ce membre ?')"
                                        class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.875rem; background: var(--error);">
                                         Supprimer
